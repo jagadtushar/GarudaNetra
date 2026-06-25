@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="GarudaNetra — Scan QR codes and analyze URLs for phishing threats." />
+  <title>GarudaNetra · QR & URL Threat Scanner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" id="favicon" href="dark2.jpeg" />
+</head>
+
+<body>
+  <!-- Cyber background effects -->
+  <div class="cyber-bg" aria-hidden="true"></div>
+  <div class="cyber-grid" aria-hidden="true"></div>
+  <canvas id="cyberCanvas" aria-hidden="true"></canvas>
+  <div class="orb o1" aria-hidden="true"></div>
+  <div class="orb o2" aria-hidden="true"></div>
+  <div class="orb o3" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <button class="brand" data-view="home" aria-label="GarudaNetra home">
+        <span class="brand-mark" role="img" aria-label="GarudaNetra logo"></span>
+        <span class="brand-text">
+          <span class="brand-name">GarudaNetra</span>
+          <span class="brand-tag">Threat Scanner</span>
+        </span>
+      </button>
+
+      <nav class="nav" id="nav">
+        <button class="nav-item active" data-view="home"><span class="nav-ico">🏠</span><span>Home</span></button>
+        <button class="nav-item" data-view="scan"><span class="nav-ico">🔍</span><span>Scan</span></button>
+        <button class="nav-item" data-view="history"><span class="nav-ico">🕓</span><span>History</span></button>
+        <button class="nav-item" data-view="about"><span class="nav-ico">ℹ️</span><span>About</span></button>
+      </nav>
+
+      <div class="header-actions">
+        <button class="ghost-btn" id="quickScanBtn">＋ New Scan</button>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+        <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+    <!-- ============ HOME ============ -->
+    <section class="view active" id="view-home">
+      <!-- Hero -->
+      <div class="hero">
+        <span class="hero-badge"><i class="status-dot"></i> Real-time heuristic threat engine · 100% client-side</span>
+        <h2 class="hero-title">Scan QR codes.<br><span>Expose phishing threats.</span></h2>
+        <p class="hero-text">
+          GarudaNetra decodes any QR code or URL and inspects it against a battery of
+          security heuristics to reveal phishing and malware threats — with a clear risk
+          score, plain-language explanations, and downloadable PDF reports. Everything
+          runs locally in your browser; no link or image is ever uploaded.
+        </p>
+        <div class="hero-actions">
+          <button class="primary-btn lg" data-view="scan">🔍 Start Scanning</button>
+        </div>
+      </div>
+
+      <!-- What it does -->
+      <h3 class="section-heading">What GarudaNetra does</h3>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-ico">📁</div>
+          <h4>QR Upload</h4>
+          <p>Drag & drop or browse a QR image — it's decoded instantly, right in your browser.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-ico">📷</div>
+          <h4>Camera Scanning</h4>
+          <p>Point your device camera at a QR code for automatic, live detection.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-ico">📊</div>
+          <h4>Risk Scoring</h4>
+          <p>Every link gets a 0–100 risk score and a clear Safe / Suspicious / Dangerous verdict.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-ico">🧠</div>
+          <h4>Threat Explanations</h4>
+          <p>Risky links come with plain-language reasons and recommended actions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-ico">📄</div>
+          <h4>PDF Reports</h4>
+          <p>Download a branded threat report for any scan to keep or share.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-ico">🔒</div>
+          <h4>100% Private</h4>
+          <p>All analysis happens on your device. Nothing is sent to any server.</p>
+        </div>
+      </div>
+
+      <!-- Threat analysis workflow -->
+      <h3 class="section-heading">Threat analysis workflow</h3>
+      <div class="panel">
+        <div class="workflow">
+          <div class="flow-node">
+            <div class="flow-ico">📥</div>
+            <div class="flow-step">Step 01</div>
+            <h4>Capture</h4>
+            <p>Upload, camera-scan, or paste a URL.</p>
+          </div>
+          <div class="flow-node">
+            <div class="flow-ico">🔓</div>
+            <div class="flow-step">Step 02</div>
+            <h4>Decode</h4>
+            <p>The QR payload is extracted in-browser.</p>
+          </div>
+          <div class="flow-node">
+            <div class="flow-ico">🧬</div>
+            <div class="flow-step">Step 03</div>
+            <h4>Analyze</h4>
+            <p>Weighted signals inspect the link.</p>
+          </div>
+          <div class="flow-node">
+            <div class="flow-ico">📈</div>
+            <div class="flow-step">Step 04</div>
+            <h4>Score</h4>
+            <p>A 0–100 risk score &amp; verdict is built.</p>
+          </div>
+          <div class="flow-node">
+            <div class="flow-ico">🛡️</div>
+            <div class="flow-step">Step 05</div>
+            <h4>Report</h4>
+            <p>Explanations &amp; a PDF threat report.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- How threats are scored -->
+      <h3 class="section-heading">How Threats Are Scored</h3>
+      <div class="panel about-panel">
+        <p>Each URL is evaluated against a set of weighted heuristics used by security teams to spot phishing. Matched
+          signals add to a 0–100 risk score, which maps to a verdict:</p>
+        <div class="verdict-legend">
+          <span class="badge safe">0–34 Safe</span>
+          <span class="badge sus">35–64 Suspicious</span>
+          <span class="badge danger">65–100 Dangerous</span>
+        </div>
+        <h3>Detection signals</h3>
+        <ul class="signal-list" id="signalDocList"></ul>
+        <p class="disclaimer">⚠️ GarudaNetra uses heuristic analysis and is an assistive tool, not a guarantee. Always
+          exercise caution before opening untrusted links.</p>
+      </div>
+
+      <!-- Your activity at a glance -->
+      <h3 class="section-heading">Your activity at a glance</h3>
+      <div class="glance-grid">
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-ico blue">🔢</div>
+            <div>
+              <div class="stat-num" id="statTotal">0</div>
+              <div class="stat-label">Total Scans</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ico green">✅</div>
+            <div>
+              <div class="stat-num" id="statSafe">0</div>
+              <div class="stat-label">Safe</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ico amber">⚠️</div>
+            <div>
+              <div class="stat-num" id="statSus">0</div>
+              <div class="stat-label">Suspicious</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ico red">⛔</div>
+            <div>
+              <div class="stat-num" id="statDanger">0</div>
+              <div class="stat-label">Dangerous</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel home-donut">
+          <div class="panel-head">
+            <h2>Threat Distribution</h2>
+          </div>
+          <div class="donut-row">
+            <div class="donut-wrap">
+              <svg viewBox="0 0 42 42" class="donut" id="donut">
+                <circle class="donut-ring" cx="21" cy="21" r="15.915"></circle>
+                <circle class="donut-seg seg-safe" cx="21" cy="21" r="15.915" id="segSafe"></circle>
+                <circle class="donut-seg seg-sus" cx="21" cy="21" r="15.915" id="segSus"></circle>
+                <circle class="donut-seg seg-danger" cx="21" cy="21" r="15.915" id="segDanger"></circle>
+              </svg>
+              <div class="donut-center"><span id="donutPct">0%</span><small>Safe</small></div>
+            </div>
+            <div class="legend">
+              <div><i class="dot safe"></i> Safe <b id="legSafe">0</b></div>
+              <div><i class="dot sus"></i> Suspicious <b id="legSus">0</b></div>
+              <div><i class="dot danger"></i> Dangerous <b id="legDanger">0</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCAN ============ -->
+    <section class="view" id="view-scan">
+      <div class="scan-grid">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Capture a QR Code</h2>
+          </div>
+          <div class="tabs" id="scanTabs">
+            <button class="tab active" data-tab="upload">📁 Upload</button>
+            <button class="tab" data-tab="camera">📷 Camera</button>
+            <button class="tab" data-tab="manual">⌨️ Manual URL</button>
+          </div>
+
+          <!-- Upload -->
+          <div class="tab-pane active" id="pane-upload">
+            <label class="dropzone" id="dropzone">
+              <input type="file" id="fileInput" accept="image/*" hidden />
+              <div class="dz-ico">📤</div>
+              <div class="dz-title">Drop a QR image here</div>
+              <div class="dz-sub">or click to browse · PNG, JPG, WEBP, SVG</div>
+            </label>
+            <img id="previewImg" class="preview-img" alt="" hidden />
+          </div>
+
+          <!-- Camera -->
+          <div class="tab-pane" id="pane-camera">
+            <div class="camera-box">
+              <video id="video" playsinline muted></video>
+              <div class="scan-frame"></div>
+              <canvas id="camCanvas" hidden></canvas>
+            </div>
+            <div class="camera-controls">
+              <button class="primary-btn" id="startCam">▶ Start Camera</button>
+              <button class="ghost-btn" id="stopCam" disabled>■ Stop</button>
+            </div>
+            <p class="hint" id="camHint">Point your camera at a QR code. Detection is automatic.</p>
+          </div>
+
+          <!-- Manual -->
+          <div class="tab-pane" id="pane-manual">
+            <label class="field-label" for="manualUrl">Paste a URL to analyze</label>
+            <div class="manual-row">
+              <input type="text" id="manualUrl" class="text-input" placeholder="https://example.com/login" />
+              <button class="primary-btn" id="analyzeManual">Analyze</button>
+            </div>
+            <p class="hint">No QR? Paste any link to run the full phishing analysis.</p>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="panel result-panel" id="resultPanel">
+          <div class="empty-result" id="emptyResult">
+            <div class="empty-ico">🛡️</div>
+            <p>Scan a QR code or paste a URL to see a full threat analysis.</p>
+          </div>
+          <div id="resultBody" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HISTORY ============ -->
+    <section class="view" id="view-history">
+      <div class="panel">
+        <div class="panel-head history-head">
+          <h2>Scan History</h2>
+          <div class="history-tools">
+            <input type="search" id="historySearch" class="text-input small" placeholder="Search URLs…" />
+            <select id="historyFilter" class="select">
+              <option value="all">All risks</option>
+              <option value="safe">Safe</option>
+              <option value="suspicious">Suspicious</option>
+              <option value="dangerous">Dangerous</option>
+            </select>
+            <button class="ghost-btn danger" id="clearHistory">🗑 Clear</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Risk</th>
+                <th>URL</th>
+                <th>Score</th>
+                <th>Source</th>
+                <th>Date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-result" id="emptyHistory" hidden>
+          <div class="empty-ico">🕓</div>
+          <p>No scans yet. Your scan history will appear here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="view" id="view-about">
+      <div class="about-grid">
+        <!-- About me -->
+        <div class="about-col">
+          <h3 class="section-heading">About me</h3>
+          <div class="panel dev-panel">
+          <div class="dev-head">
+            <img class="dev-avatar" src="tushar.jpeg" alt="Tushar Jagad" />
+            <div class="dev-id">
+              <h2>Tushar Jagad</h2>
+              <p class="dev-role">Cybersecurity Enthusiast • Threat Detection Developer • Creator of GarudaNetra</p>
+              <div class="dev-links">
+                <a class="chip" href="mailto:jagadtusharn@gmail.com">✉️ Email</a>
+                <a class="chip" href="https://github.com/jagadtushar" target="_blank" rel="noopener">🐙 GitHub</a>
+                <a class="chip" href="https://www.linkedin.com/in/jagadtushar/" target="_blank" rel="noopener">💼
+                  LinkedIn</a>
+              </div>
+            </div>
+          </div>
+          <p class="dev-bio">
+            Hi, I'm Tushar — a final-year Diploma student at R.C. Technical Institute, Ahmedabad, passionate about
+            cybersecurity. Creator of GarudaNetra, a QR threat-detection platform built during my internship with
+            BharatCares (in collaboration with IBM SkillsBuild) to help users identify phishing attacks, analyze
+            suspicious URLs, and stay safe online.
+          </p>
+          </div>
+        </div>
+
+        <!-- Contact & feedback -->
+        <div class="about-col">
+          <h3 class="section-heading">Contact &amp; Feedback</h3>
+          <div class="panel">
+          <p class="muted" style="margin: 0 0 18px">
+            Found a bug, have a feature idea, or just want to say hi? Send a message below.
+          </p>
+          <form id="feedbackForm" class="feedback-form" novalidate>
+            <div class="form-row">
+              <div class="form-field">
+                <label class="field-label" for="fbName">Name <span class="req">*</span></label>
+                <input id="fbName" class="text-input small" type="text" placeholder="Your name" autocomplete="name" />
+                <div class="field-error" id="fbNameErr" hidden>Please enter your name.</div>
+              </div>
+              <div class="form-field">
+                <label class="field-label" for="fbEmail">Email <span class="req">*</span></label>
+                <input id="fbEmail" class="text-input small" type="email" placeholder="you@example.com"
+                  autocomplete="email" />
+                <div class="field-error" id="fbEmailErr" hidden>Please enter a valid email.</div>
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="field-label" for="fbType">Topic</label>
+              <select id="fbType" class="select fb-select">
+                <option>General feedback</option>
+                <option>Bug report</option>
+                <option>Feature request</option>
+                <option>Say hello</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="field-label" for="fbMessage">Message <span class="req">*</span></label>
+              <textarea id="fbMessage" class="text-input small fb-textarea" rows="4"
+                placeholder="Write your message…"></textarea>
+              <div class="field-error" id="fbMsgErr" hidden>Please enter a message.</div>
+            </div>
+            <div class="feedback-actions">
+              <button type="submit" class="primary-btn">📨 Send Message</button>
+              <span class="muted">Opens your email app — and a copy is saved on this device.</span>
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="brand-mark" role="img" aria-label="GarudaNetra logo"></div>
+        <div>
+          <div class="brand-name">GarudaNetra</div>
+          <p>QR &amp; URL threat scanner. Every link and image is analyzed locally in your browser — nothing is ever
+            uploaded to a server.</p>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Navigate</h5>
+        <button class="footer-link" data-view="home">Home</button>
+        <button class="footer-link" data-view="scan">Scan</button>
+        <button class="footer-link" data-view="history">History</button>
+        <button class="footer-link" data-view="about">About</button>
+      </div>
+      <div class="footer-col">
+        <h5>Status</h5>
+        <span class="footer-status"><i class="status-dot"></i> Engine ready · local-only</span>
+        <p class="footer-note">GarudaNetra uses heuristic analysis and is an assistive tool, not a guarantee. Always
+          exercise caution before opening untrusted links.</p>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>© 2026 GarudaNetra · All analysis runs on-device.</span>
+      <span>Built with HTML · CSS · JavaScript</span>
+    </div>
+  </footer>
+
+  <!-- Report recipient modal -->
+  <div class="modal-overlay" id="reportModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rptTitle">
+      <button class="modal-close" id="rptClose" aria-label="Close">✕</button>
+      <div class="modal-logo" role="img" aria-label="GarudaNetra"></div>
+      <h3 id="rptTitle">Generate PDF Report</h3>
+      <p class="modal-sub">These details will be printed on the report.</p>
+
+      <label class="field-label" for="rptName">Full name <span class="req">*</span></label>
+      <input id="rptName" class="text-input small" type="text" placeholder="e.g. Tushar Jagad" autocomplete="name" />
+      <div class="field-error" id="rptNameErr" hidden>Please enter a name.</div>
+
+      <label class="field-label" for="rptEmail" style="margin-top:14px">Email <span
+          class="opt">(optional)</span></label>
+      <input id="rptEmail" class="text-input small" type="email" placeholder="name@example.com" autocomplete="email" />
+      <div class="field-error" id="rptEmailErr" hidden>Please enter a valid email address.</div>
+
+      <div class="modal-actions">
+        <button class="ghost-btn" id="rptCancel">Cancel</button>
+        <button class="primary-btn" id="rptGenerate">📄 Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- App -->
+  <script src="js/effects.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/analyzer.js"></script>
+  <script src="js/scanner.js"></script>
+  <script src="js/report.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
