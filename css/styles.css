@@ -89,7 +89,12 @@
    (e.g. .empty-result{display:flex}) so JS toggling actually hides elements. */
 [hidden] { display: none !important; }
 
-html, body { height: 100%; }
+/* Clip horizontal overflow on <html>, NOT <body>: setting overflow-x on the
+   body makes it the scroll container and breaks the sticky header. No height:100%
+   here — that would make <html> a fixed-height scroll container that body
+   overflows, which also breaks sticky on tall pages like Home. The viewport
+   stays the sole scroll container; body's min-height:100vh still pins the footer. */
+html { overflow-x: hidden; }
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -101,7 +106,6 @@ body {
   -webkit-font-smoothing: antialiased;
   transition: background .4s ease, color .4s ease;
   position: relative;
-  overflow-x: hidden;
 }
 
 h1,h2,h3 { font-weight: 700; letter-spacing: -.01em; }
@@ -280,7 +284,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .footer-inner {
   max-width: 1280px; margin: 0 auto; padding: 36px 28px 26px;
-  display: grid; grid-template-columns: 1.6fr 1fr 1.2fr; gap: 32px;
+  display: grid; grid-template-columns: 1.6fr 1fr 1.2fr 1.2fr; gap: 32px;
 }
 .footer-brand { display: flex; gap: 14px; align-items: flex-start; }
 .footer-brand .brand-name { font-size: 1.1rem; }
@@ -288,7 +292,7 @@ button { font-family: inherit; cursor: pointer; }
 .footer-col { display: flex; flex-direction: column; gap: 9px; }
 .footer-col h5 {
   font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
-  color: var(--text-faint); font-weight: 700; margin-bottom: 4px;
+  color: var(--text); font-weight: 700; margin-bottom: 4px;
 }
 .footer-link {
   background: none; border: none; padding: 0; text-align: left;
@@ -297,6 +301,8 @@ button { font-family: inherit; cursor: pointer; }
 .footer-link:hover { color: var(--brand); }
 .footer-status { display: flex; align-items: center; gap: 8px; font-size: .84rem; color: var(--text-dim); }
 .footer-note { font-size: .8rem; color: var(--text-faint); line-height: 1.5; margin-top: 4px; }
+.footer-meta { font-size: .84rem; color: var(--text-dim); line-height: 1.4; }
+.footer-meta.strong { color: var(--text); font-weight: 600; }
 .footer-bar {
   max-width: 1280px; margin: 0 auto; padding: 16px 28px;
   border-top: 1px solid var(--border);
@@ -375,6 +381,9 @@ button { font-family: inherit; cursor: pointer; }
   border: 1px solid var(--border); border-radius: var(--radius-lg);
   padding: 58px 46px; box-shadow: var(--shadow-lg); margin-bottom: 34px;
 }
+/* keep the hero text above the decorative eagle (::after is positioned,
+   so without this it would paint on top of the static text) */
+.hero > * { position: relative; z-index: 1; }
 .hero::before {
   content: ''; position: absolute; inset: 0; border-radius: var(--radius-lg); padding: 1px;
   background: linear-gradient(135deg, var(--brand), transparent 40%, transparent 60%, var(--brand-2));
@@ -651,6 +660,45 @@ button { font-family: inherit; cursor: pointer; }
   color: var(--text-dim); height: 100%; }
 .empty-ico { font-size: 3rem; opacity: .6; }
 
+/* ---- Scanning / processing state ---- */
+.scanning {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: 6px; padding: 46px 20px;
+}
+.scan-radar {
+  position: relative; width: 86px; height: 86px; border-radius: 50%; margin-bottom: 18px;
+  background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.scan-radar::before, .scan-radar::after {
+  content: ''; position: absolute; border-radius: 50%;
+  border: 2px solid transparent; border-top-color: var(--brand);
+  animation: scanspin 1s linear infinite;
+}
+.scan-radar::before { inset: 0; }
+.scan-radar::after { inset: 15px; border-top-color: var(--brand-2); animation-duration: 1.5s; animation-direction: reverse; }
+.scan-core { position: absolute; inset: 0; display: grid; place-items: center; font-size: 1.6rem; }
+@keyframes scanspin { to { transform: rotate(360deg); } }
+
+.scanning-title { font-size: 1.1rem; }
+.scanning-url {
+  font-family: 'JetBrains Mono', monospace; font-size: .82rem; color: var(--text-dim);
+  max-width: 100%; overflow-wrap: anywhere; margin-bottom: 10px;
+}
+.scan-steps { list-style: none; display: flex; flex-direction: column; gap: 9px; text-align: left; }
+.scan-steps li {
+  display: flex; align-items: center; gap: 10px; font-size: .86rem;
+  color: var(--text-faint); opacity: .55; transition: color var(--speed), opacity var(--speed);
+}
+.scan-steps li::before {
+  content: '○'; font-size: .95rem; color: var(--text-faint);
+}
+.scan-steps li.active { color: var(--text); opacity: 1; }
+.scan-steps li.active::before { content: '◍'; color: var(--brand); animation: scanblink .9s ease-in-out infinite; }
+.scan-steps li.done { color: var(--text-dim); opacity: 1; }
+.scan-steps li.done::before { content: '✓'; color: var(--safe); animation: none; }
+@keyframes scanblink { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
 .result-head { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
 .rh-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
 .score-readout { display: flex; align-items: baseline; gap: 7px; }
@@ -900,6 +948,9 @@ button { font-family: inherit; cursor: pointer; }
   .hero { padding: 34px 22px; }
   .hero-title { font-size: 1.8rem; }
   .stat-grid { grid-template-columns: 1fr; }
+  /* shrink + soften the eagle so it stays a corner accent, not a full overlay */
+  .hero::after { width: 210px; height: 210px; right: -48px; bottom: -56px; opacity: .35; }
+  [data-theme="light"] .hero::after { opacity: .5; }
 }
 
 @media (max-width: 860px) {
@@ -935,6 +986,9 @@ button { font-family: inherit; cursor: pointer; }
   #quickScanBtn { display: none; }
   .footer-inner { grid-template-columns: 1fr; }
   .footer-bar { justify-content: center; text-align: center; }
+  /* Stack the URL input above a full-width Analyze button so neither gets squeezed */
+  .manual-row { flex-direction: column; }
+  .manual-row .primary-btn { width: 100%; }
 }
 
 /* ===================== LIGHT THEME (brown) OVERRIDES ===================== */

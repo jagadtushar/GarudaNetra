@@ -123,16 +123,48 @@
 
   /* ---------------- CORE SCAN FLOW ---------------- */
   function processScan(payload, source) {
-    const result = Analyzer.analyze(payload);
-    result.source = source;
-    lastResult = result;
-    lastTs = Date.now();
-    const record = Store.add(result);
-    lastTs = record.ts;
-    renderResult(result, record.ts);
     go('scan'); // ensure scan view visible
-    const labels = { safe: 'ok', suspicious: 'warn', dangerous: 'err' };
-    toast(`Verdict: ${result.verdict.toUpperCase()} · score ${result.score}`, labels[result.verdict] || 'ok');
+    renderProcessing(payload);
+
+    // Walk the checklist while the (instant) analysis "runs", so the user
+    // sees clear processing feedback before the verdict appears.
+    const steps = $$('#resultBody .scan-steps li');
+    steps.forEach((li, idx) => setTimeout(() => {
+      steps.forEach((s, j) => { if (j < idx) s.classList.add('done'); });
+      li.classList.remove('done'); li.classList.add('active');
+    }, idx * 260));
+
+    setTimeout(() => {
+      steps.forEach((s) => { s.classList.remove('active'); s.classList.add('done'); });
+      const result = Analyzer.analyze(payload);
+      result.source = source;
+      lastResult = result;
+      lastTs = Date.now();
+      const record = Store.add(result);
+      lastTs = record.ts;
+      renderResult(result, record.ts);
+      const labels = { safe: 'ok', suspicious: 'warn', dangerous: 'err' };
+      toast(`Verdict: ${result.verdict.toUpperCase()} · score ${result.score}`, labels[result.verdict] || 'ok');
+    }, steps.length * 260 + 220);
+  }
+
+  // Animated "analyzing" placeholder shown in the result panel during a scan.
+  function renderProcessing(payload) {
+    $('#emptyResult').hidden = true;
+    const body = $('#resultBody');
+    body.hidden = false;
+    body.innerHTML = `
+      <div class="scanning">
+        <div class="scan-radar"><span class="scan-core">🔍</span></div>
+        <h3 class="scanning-title">Analyzing…</h3>
+        <p class="scanning-url">${esc(payload)}</p>
+        <ul class="scan-steps">
+          <li>Reading input</li>
+          <li>Inspecting URL structure</li>
+          <li>Matching threat signals</li>
+          <li>Calculating risk score</li>
+        </ul>
+      </div>`;
   }
 
   function renderResult(result, ts) {
