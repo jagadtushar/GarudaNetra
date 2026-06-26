@@ -491,42 +491,26 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ===================== THREAT WORKFLOW ===================== */
 .workflow {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;
   position: relative; margin-top: 4px;
 }
-.flow-node { position: relative; text-align: center; padding: 6px 10px; }
+.flow-node {
+  position: relative; text-align: center; padding: 20px 14px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface-2);
+  transition: transform var(--speed) var(--ease), border-color var(--speed), box-shadow var(--speed);
+}
+.flow-node:hover { transform: translateY(-4px); border-color: var(--border-strong); box-shadow: var(--shadow-lg); }
 /* connector line between nodes */
 .flow-node:not(:last-child)::after {
-  content: ''; position: absolute; top: 34px; left: 60%; right: -40%; height: 2px;
+  content: ''; position: absolute; top: 50%; right: -14px; width: 14px; height: 2px;
   background: linear-gradient(90deg, var(--border-strong), var(--border));
-  overflow: hidden;
 }
-/* animated pulse traveling along the connector */
-.flow-node:not(:last-child)::before {
-  content: ''; position: absolute; top: 32px; left: 60%; z-index: 1;
-  width: 8px; height: 6px; border-radius: 4px; background: var(--cyan);
-  box-shadow: 0 0 10px var(--cyan);
-  animation: flowpulse 2.6s var(--ease) infinite;
+.flow-step {
+  display: inline-block; margin-bottom: 8px;
+  font-size: .68rem; font-weight: 700; color: var(--brand);
+  text-transform: uppercase; letter-spacing: .08em;
 }
-.flow-node:nth-child(2)::before { animation-delay: .4s; }
-.flow-node:nth-child(3)::before { animation-delay: .8s; }
-.flow-node:nth-child(4)::before { animation-delay: 1.2s; }
-@keyframes flowpulse {
-  0% { transform: translateX(0); opacity: 0; }
-  15% { opacity: 1; }
-  85% { opacity: 1; }
-  100% { transform: translateX(280%); opacity: 0; }
-}
-.flow-ico {
-  width: 64px; height: 64px; margin: 0 auto 14px; border-radius: 18px;
-  display: grid; place-items: center; font-size: 1.7rem; position: relative; z-index: 2;
-  background: var(--surface-2);
-  border: 1px solid var(--border-strong);
-  box-shadow: 0 0 24px var(--glow), inset 0 0 0 1px rgba(255,255,255,.04);
-  transition: transform var(--speed) var(--ease), box-shadow var(--speed);
-}
-.flow-node:hover .flow-ico { transform: translateY(-4px) scale(1.05); box-shadow: 0 0 34px var(--glow); }
-.flow-step { font-size: .68rem; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .08em; }
 .flow-node h4 { font-size: .95rem; margin: 3px 0 5px; }
 .flow-node p { font-size: .78rem; color: var(--text-dim); line-height: 1.5; }
 

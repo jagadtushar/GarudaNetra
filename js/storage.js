@@ -71,10 +71,11 @@ const Store = (() => {
 
   /* ---- theme ---- */
   function getTheme() {
-    return localStorage.getItem(THEME_KEY) || 'dark';
+    try { return localStorage.getItem(THEME_KEY) || 'dark'; }
+    catch { return 'dark'; }
   }
   function setTheme(t) {
-    localStorage.setItem(THEME_KEY, t);
+    try { localStorage.setItem(THEME_KEY, t); } catch {}
   }
 
   /* ---- report recipient (prefill) ---- */

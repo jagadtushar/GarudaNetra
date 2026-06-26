@@ -36,10 +36,10 @@
       </button>
 
       <nav class="nav" id="nav">
-        <button class="nav-item active" data-view="home"><span class="nav-ico">🏠</span><span>Home</span></button>
-        <button class="nav-item" data-view="scan"><span class="nav-ico">🔍</span><span>Scan</span></button>
-        <button class="nav-item" data-view="history"><span class="nav-ico">🕓</span><span>History</span></button>
-        <button class="nav-item" data-view="about"><span class="nav-ico">ℹ️</span><span>About</span></button>
+        <button class="nav-item active" data-view="home"><span>Home</span></button>
+        <button class="nav-item" data-view="scan"><span>Scan</span></button>
+        <button class="nav-item" data-view="history"><span>History</span></button>
+        <button class="nav-item" data-view="about"><span>About</span></button>
       </nav>
 
       <div class="header-actions">
@@ -64,7 +64,7 @@
           runs locally in your browser; no link or image is ever uploaded.
         </p>
         <div class="hero-actions">
-          <button class="primary-btn lg" data-view="scan">🔍 Start Scanning</button>
+          <button class="primary-btn lg" data-view="scan">Start Scanning</button>
         </div>
       </div>
 
@@ -72,32 +72,26 @@
       <h3 class="section-heading">What GarudaNetra does</h3>
       <div class="feature-grid">
         <div class="feature-card">
-          <div class="feature-ico">📁</div>
           <h4>QR Upload</h4>
           <p>Drag & drop or browse a QR image — it's decoded instantly, right in your browser.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-ico">📷</div>
           <h4>Camera Scanning</h4>
           <p>Point your device camera at a QR code for automatic, live detection.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-ico">📊</div>
           <h4>Risk Scoring</h4>
           <p>Every link gets a 0–100 risk score and a clear Safe / Suspicious / Dangerous verdict.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-ico">🧠</div>
           <h4>Threat Explanations</h4>
           <p>Risky links come with plain-language reasons and recommended actions.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-ico">📄</div>
           <h4>PDF Reports</h4>
           <p>Download a branded threat report for any scan to keep or share.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-ico">🔒</div>
           <h4>100% Private</h4>
           <p>All analysis happens on your device. Nothing is sent to any server.</p>
         </div>
@@ -108,31 +102,26 @@
       <div class="panel">
         <div class="workflow">
           <div class="flow-node">
-            <div class="flow-ico">📥</div>
             <div class="flow-step">Step 01</div>
             <h4>Capture</h4>
             <p>Upload, camera-scan, or paste a URL.</p>
           </div>
           <div class="flow-node">
-            <div class="flow-ico">🔓</div>
             <div class="flow-step">Step 02</div>
             <h4>Decode</h4>
             <p>The QR payload is extracted in-browser.</p>
           </div>
           <div class="flow-node">
-            <div class="flow-ico">🧬</div>
             <div class="flow-step">Step 03</div>
             <h4>Analyze</h4>
             <p>Weighted signals inspect the link.</p>
           </div>
           <div class="flow-node">
-            <div class="flow-ico">📈</div>
             <div class="flow-step">Step 04</div>
             <h4>Score</h4>
             <p>A 0–100 risk score &amp; verdict is built.</p>
           </div>
           <div class="flow-node">
-            <div class="flow-ico">🛡️</div>
             <div class="flow-step">Step 05</div>
             <h4>Report</h4>
             <p>Explanations &amp; a PDF threat report.</p>
@@ -152,7 +141,7 @@
         </div>
         <h3>Detection signals</h3>
         <ul class="signal-list" id="signalDocList"></ul>
-        <p class="disclaimer">⚠️ GarudaNetra uses heuristic analysis and is an assistive tool, not a guarantee. Always
+        <p class="disclaimer">GarudaNetra uses heuristic analysis and is an assistive tool, not a guarantee. Always
           exercise caution before opening untrusted links.</p>
       </div>
 
@@ -161,28 +150,24 @@
       <div class="glance-grid">
         <div class="stat-grid">
           <div class="stat-card">
-            <div class="stat-ico blue">🔢</div>
             <div>
               <div class="stat-num" id="statTotal">0</div>
               <div class="stat-label">Total Scans</div>
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-ico green">✅</div>
             <div>
               <div class="stat-num" id="statSafe">0</div>
               <div class="stat-label">Safe</div>
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-ico amber">⚠️</div>
             <div>
               <div class="stat-num" id="statSus">0</div>
               <div class="stat-label">Suspicious</div>
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-ico red">⛔</div>
             <div>
               <div class="stat-num" id="statDanger">0</div>
               <div class="stat-label">Dangerous</div>
@@ -222,16 +207,15 @@
             <h2>Capture a QR Code</h2>
           </div>
           <div class="tabs" id="scanTabs">
-            <button class="tab active" data-tab="upload">📁 Upload</button>
-            <button class="tab" data-tab="camera">📷 Camera</button>
-            <button class="tab" data-tab="manual">⌨️ Manual URL</button>
+            <button class="tab active" data-tab="upload">Upload</button>
+            <button class="tab" data-tab="camera">Camera</button>
+            <button class="tab" data-tab="manual">Manual URL</button>
           </div>
 
           <!-- Upload -->
           <div class="tab-pane active" id="pane-upload">
             <label class="dropzone" id="dropzone">
               <input type="file" id="fileInput" accept="image/*" hidden />
-              <div class="dz-ico">📤</div>
               <div class="dz-title">Drop a QR image here</div>
               <div class="dz-sub">or click to browse · PNG, JPG, WEBP, SVG</div>
             </label>
@@ -266,7 +250,6 @@
         <!-- Result -->
         <div class="panel result-panel" id="resultPanel">
           <div class="empty-result" id="emptyResult">
-            <div class="empty-ico">🛡️</div>
             <p>Scan a QR code or paste a URL to see a full threat analysis.</p>
           </div>
           <div id="resultBody" hidden></div>
@@ -287,7 +270,7 @@
               <option value="suspicious">Suspicious</option>
               <option value="dangerous">Dangerous</option>
             </select>
-            <button class="ghost-btn danger" id="clearHistory">🗑 Clear</button>
+            <button class="ghost-btn danger" id="clearHistory">Clear</button>
           </div>
         </div>
         <div class="table-wrap">
@@ -306,7 +289,6 @@
           </table>
         </div>
         <div class="empty-result" id="emptyHistory" hidden>
-          <div class="empty-ico">🕓</div>
           <p>No scans yet. Your scan history will appear here.</p>
         </div>
       </div>
@@ -325,10 +307,9 @@
               <h2>Tushar Jagad</h2>
               <p class="dev-role">Cybersecurity Enthusiast • Threat Detection Developer • Creator of GarudaNetra</p>
               <div class="dev-links">
-                <a class="chip" href="mailto:jagadtusharn@gmail.com">✉️ Email</a>
-                <a class="chip" href="https://github.com/jagadtushar" target="_blank" rel="noopener">🐙 GitHub</a>
-                <a class="chip" href="https://www.linkedin.com/in/jagadtushar/" target="_blank" rel="noopener">💼
-                  LinkedIn</a>
+                <a class="chip" href="mailto:jagadtusharn@gmail.com">Email</a>
+                <a class="chip" href="https://github.com/jagadtushar" target="_blank" rel="noopener">GitHub</a>
+                <a class="chip" href="https://www.linkedin.com/in/jagadtushar/" target="_blank" rel="noopener">LinkedIn</a>
               </div>
             </div>
           </div>
@@ -378,7 +359,7 @@
               <div class="field-error" id="fbMsgErr" hidden>Please enter a message.</div>
             </div>
             <div class="feedback-actions">
-              <button type="submit" class="primary-btn">📨 Send Message</button>
+              <button type="submit" class="primary-btn">Send Message</button>
               <span class="muted">Opens your email app — and a copy is saved on this device.</span>
             </div>
           </form>
@@ -445,7 +426,7 @@
 
       <div class="modal-actions">
         <button class="ghost-btn" id="rptCancel">Cancel</button>
-        <button class="primary-btn" id="rptGenerate">📄 Download PDF</button>
+        <button class="primary-btn" id="rptGenerate">Download PDF</button>
       </div>
     </div>
   </div>

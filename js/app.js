@@ -155,7 +155,7 @@
     body.hidden = false;
     body.innerHTML = `
       <div class="scanning">
-        <div class="scan-radar"><span class="scan-core">🔍</span></div>
+        <div class="scan-radar"></div>
         <h3 class="scanning-title">Analyzing…</h3>
         <p class="scanning-url">${esc(payload)}</p>
         <ul class="scan-steps">
@@ -234,7 +234,7 @@
       </div>
 
       <div class="section-title">Threat Signals — ${hits.length} triggered</div>
-      ${hits.length ? hits.map(signalRow).join('') : '<p class="hint">✅ No threat signals were triggered.</p>'}
+      ${hits.length ? hits.map(signalRow).join('') : '<p class="hint">No threat signals were triggered.</p>'}
 
       <details style="margin-top:14px">
         <summary class="muted" style="cursor:pointer">Show ${clean.length} passed checks</summary>
@@ -242,8 +242,8 @@
       </details>
 
       <div class="result-actions">
-        <button class="primary-btn" id="pdfBtn">📄 Download PDF Report</button>
-        <button class="ghost-btn" id="openBtn">🔗 Open Safely</button>
+        <button class="primary-btn" id="pdfBtn">Download PDF Report</button>
+        <button class="ghost-btn" id="openBtn">Open Safely</button>
         <button class="ghost-btn" id="rescanBtn">↻ New Scan</button>
       </div>`;
 
@@ -254,7 +254,7 @@
     $('#pdfBtn').addEventListener('click', () => openReportModal(result, ts));
     $('#openBtn').addEventListener('click', () => {
       if (result.verdict !== 'safe') {
-        if (!confirm(`⚠️ This link is rated ${result.verdict.toUpperCase()} (risk ${result.score}).\n\nOpen it anyway?`)) return;
+        if (!confirm(`This link is rated ${result.verdict.toUpperCase()} (risk ${result.score}).\n\nOpen it anyway?`)) return;
       }
       window.open(result.url, '_blank', 'noopener,noreferrer');
     });
@@ -266,11 +266,9 @@
 
   function explanationBlock(result) {
     const ex = result.explanation;
-    const icon = result.verdict === 'dangerous' ? '⛔' : '⚠️';
     return `
       <div class="explain ${result.verdict}">
         <div class="explain-head">
-          <span class="explain-ico">${icon}</span>
           <div>
             <div class="explain-title">Why this link is ${esc(result.verdict)}</div>
             <p class="explain-lead">${esc(ex.headline)}</p>
@@ -314,7 +312,6 @@
     // Distinguish "no scans at all" from "filters hid everything".
     if (list.length === 0) {
       const filtered = all.length > 0;
-      empty.querySelector('.empty-ico').textContent = filtered ? '🔍' : '🕓';
       empty.querySelector('p').textContent = filtered
         ? 'No scans match your search or filter. Clear them to see all ' + all.length + ' scans.'
         : 'No scans yet. Your scan history will appear here.';
