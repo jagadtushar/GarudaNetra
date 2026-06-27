@@ -324,5 +324,24 @@ const Analyzer = (() => {
     return SIGNALS.map((s) => ({ label: s.label, weight: s.weight }));
   }
 
-  return { analyze, signalDocs };
+  /**
+   * True when `raw` is a proper URL worth analyzing (not just plain text).
+   * Bare domains ("example.com") and dangerous URI schemes (data:, javascript:)
+   * count; arbitrary words ("helloworld", "my note") do not.
+   */
+  function looksLikeUrl(raw) {
+    raw = (raw || '').trim();
+    if (!raw) return false;
+    // Dangerous / non-web schemes are still "URLs" we want to flag.
+    if (/^(data|javascript|vbscript|file|ftp):/i.test(raw)) return true;
+    const ctx = parse(raw);
+    if (!ctx || !/^https?:$/i.test(ctx.protocol)) return false;
+    const host = ctx.host;
+    // IPv4 or IPv6 hosts are valid.
+    if (/^\d{1,3}(\.\d{1,3}){3}$/.test(host) || host.includes(':')) return true;
+    // Otherwise require a dotted domain ending in a 2+ letter TLD.
+    return /^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/i.test(host);
+  }
+
+  return { analyze, signalDocs, looksLikeUrl };
 })();

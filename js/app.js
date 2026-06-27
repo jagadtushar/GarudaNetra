@@ -18,7 +18,7 @@
   /* ---------------- THEME ---------------- */
   function applyTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
-    $('#themeToggle').textContent = t === 'dark' ? '🌙' : '☀️';
+    $('#themeToggle').innerHTML = `<svg class="icon"><use href="#i-${t === 'dark' ? 'moon' : 'sun'}"/></svg>`;
     const favicon = $('#favicon');
     if (favicon) favicon.href = t === 'dark' ? 'dark2.jpeg' : 'light2.jpeg';
     Store.setTheme(t);
@@ -83,6 +83,7 @@
       const { payload, dataUrl } = await Scanner.decodeFile(file);
       const img = $('#previewImg');
       img.src = dataUrl; img.hidden = false;
+      if (!Analyzer.looksLikeUrl(payload)) return showNeedsUrl(payload);
       processScan(payload, 'upload');
     } catch (err) {
       toast(err.message, 'err');
@@ -98,6 +99,7 @@
         $('#startCam').disabled = false; $('#stopCam').disabled = true;
         $('#camHint').textContent = 'QR detected!';
         toast('QR code detected', 'ok');
+        if (!Analyzer.looksLikeUrl(payload)) return showNeedsUrl(payload);
         processScan(payload, 'camera');
       },
       (msg) => { $('#camHint').textContent = msg; toast(msg, 'err'); });
@@ -118,6 +120,11 @@
   function runManual() {
     const val = $('#manualUrl').value.trim();
     if (!val) return toast('Enter a URL to analyze.', 'warn');
+    if (!Analyzer.looksLikeUrl(val)) {
+      toast('That doesn’t look like a URL. Enter a proper link, e.g. https://example.com', 'warn');
+      $('#manualUrl').focus();
+      return;
+    }
     processScan(val, 'manual');
   }
 
@@ -146,6 +153,26 @@
       const labels = { safe: 'ok', suspicious: 'warn', dangerous: 'err' };
       toast(`Verdict: ${result.verdict.toUpperCase()} · score ${result.score}`, labels[result.verdict] || 'ok');
     }, steps.length * 260 + 220);
+  }
+
+  // Shown when a QR code decodes to plain text / non-URL data (e.g. a note,
+  // wifi config) instead of a web link — ask the user for a proper URL.
+  function showNeedsUrl(payload) {
+    go('scan');
+    toast('QR code doesn’t contain a valid URL.', 'warn');
+    $('#emptyResult').hidden = true;
+    const body = $('#resultBody');
+    body.hidden = false;
+    body.innerHTML = `
+      <div class="result-head">
+        <div class="verdict-block">
+          <div class="verdict-label suspicious">Not a URL</div>
+          <p class="verdict-summary">This QR code doesn’t contain a proper web link, so there's nothing to analyze. Scan a QR code — or paste a link — that contains a full URL like <b>https://example.com</b>.</p>
+        </div>
+      </div>
+      ${payload ? `<div class="url-box"><span class="url-text">${esc(payload)}</span>
+        <button class="copy-btn" data-copy="${esc(payload)}" title="Copy">⧉</button></div>` : ''}`;
+    bindCopy(body);
   }
 
   // Animated "analyzing" placeholder shown in the result panel during a scan.
@@ -193,12 +220,12 @@
 
     const signalRow = (s) => `
       <div class="signal-row ${s.hit ? 'hit' : ''}">
-        <span class="signal-icon">${s.hit ? '🔴' : '🟢'}</span>
+        <span class="signal-icon"><svg class="icon"><use href="#i-${s.hit ? 'alert' : 'check-circle'}"/></svg></span>
         <span class="signal-text">
           <div class="signal-name">${esc(s.label)}${s.detail ? ` <span class="muted">(${esc(s.detail)})</span>` : ''}</div>
           <div class="signal-desc">${esc(s.info)}</div>
         </span>
-        <span class="signal-weight">${s.hit ? '+' + s.weight : '✓'}</span>
+        <span class="signal-weight">${s.hit ? '+' + s.weight : '<svg class="icon"><use href="#i-check"/></svg>'}</span>
       </div>`;
 
     body.innerHTML = `
@@ -244,7 +271,7 @@
       <div class="result-actions">
         <button class="primary-btn" id="pdfBtn">Download PDF Report</button>
         <button class="ghost-btn" id="openBtn">Open Safely</button>
-        <button class="ghost-btn" id="rescanBtn">↻ New Scan</button>
+        <button class="ghost-btn" id="rescanBtn"><svg class="icon"><use href="#i-refresh"/></svg> New Scan</button>
       </div>`;
 
     bindCopy(body);
@@ -300,20 +327,17 @@
   /* ---------------- HISTORY ---------------- */
   function renderHistory() {
     const q = $('#historySearch').value.toLowerCase();
-    const filter = $('#historyFilter').value;
     const all = Store.load();
     let list = all;
-    if (filter !== 'all') list = list.filter((r) => r.verdict === filter);
     if (q) list = list.filter((r) => r.url.toLowerCase().includes(q));
 
     const body = $('#historyBody');
     const empty = $('#emptyHistory');
     empty.hidden = list.length > 0;
-    // Distinguish "no scans at all" from "filters hid everything".
+    // Distinguish "no scans at all" from "search hid everything".
     if (list.length === 0) {
-      const filtered = all.length > 0;
-      empty.querySelector('p').textContent = filtered
-        ? 'No scans match your search or filter. Clear them to see all ' + all.length + ' scans.'
+      empty.querySelector('p').textContent = all.length > 0
+        ? 'No scans match your search. Clear it to see all ' + all.length + ' scans.'
         : 'No scans yet. Your scan history will appear here.';
     }
     body.innerHTML = list.map((r) => `
@@ -325,9 +349,9 @@
         <td class="muted">${new Date(r.ts).toLocaleString()}</td>
         <td>
           <div class="h-actions">
-            <button class="mini-btn" data-act="view" data-id="${r.id}" title="View">👁</button>
-            <button class="mini-btn" data-act="pdf" data-id="${r.id}" title="PDF">📄</button>
-            <button class="mini-btn" data-act="del" data-id="${r.id}" title="Delete">🗑</button>
+            <button class="mini-btn" data-act="view" data-id="${r.id}" title="View"><svg class="icon"><use href="#i-eye"/></svg></button>
+            <button class="mini-btn" data-act="pdf" data-id="${r.id}" title="PDF"><svg class="icon"><use href="#i-file"/></svg></button>
+            <button class="mini-btn" data-act="del" data-id="${r.id}" title="Delete"><svg class="icon"><use href="#i-trash"/></svg></button>
           </div>
         </td>
       </tr>`).join('');
@@ -349,7 +373,6 @@
     }
   }
   $('#historySearch').addEventListener('input', renderHistory);
-  $('#historyFilter').addEventListener('change', renderHistory);
   $('#clearHistory').addEventListener('click', () => {
     if (!Store.load().length) return toast('History is already empty.', 'warn');
     if (confirm('Delete all scan history? This cannot be undone.')) {

@@ -236,6 +236,25 @@ button { font-family: inherit; cursor: pointer; }
 .icon-btn:hover { background: var(--surface-2); transform: translateY(-2px); border-color: var(--border-strong); box-shadow: 0 8px 20px var(--glow); }
 .menu-toggle { display: none; }
 
+/* ===================== INLINE SVG ICONS (replaces emoji) ===================== */
+.icon {
+  width: 1.05em; height: 1.05em; flex: none;
+  display: inline-block; vertical-align: -0.15em;
+  fill: none; stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+/* leading icon + text inside non-flex headings, labels & buttons */
+.feature-card h4 .icon, .flow-node h4 .icon, .panel-head h2 .icon,
+.dz-title .icon, .field-label .icon, .tab .icon { margin-right: .5em; }
+.empty-result p .icon { margin-right: .45em; }
+/* sole-icon buttons size up a touch and lose the line-height offset */
+.icon-btn .icon, .mini-btn .icon, .modal-close .icon { width: 1.25em; height: 1.25em; vertical-align: 0; }
+/* result-panel signal status icons get their semantic colour */
+.signal-icon .icon { width: 1.05rem; height: 1.05rem; }
+.signal-icon { color: var(--safe); display: inline-flex; }
+.signal-row.hit .signal-icon { color: var(--danger); }
+.signal-weight .icon { width: .9em; height: .9em; vertical-align: -0.1em; }
+
 .ghost-btn {
   padding: 10px 17px; border-radius: 12px;
   border: 1px solid var(--border); background: var(--surface);
@@ -332,6 +351,9 @@ button { font-family: inherit; cursor: pointer; }
   background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
 }
 .panel + .panel, .dash-grid, .scan-grid { margin-top: 22px; }
+/* side-by-side panels are grid columns, not stacked — drop the stacking margin
+   so the second panel fills its full track height and aligns with the first */
+.scan-grid > .panel + .panel { margin-top: 0; }
 .panel-head {
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 18px; gap: 12px; flex-wrap: wrap;
@@ -573,7 +595,7 @@ button { font-family: inherit; cursor: pointer; }
 .risk-pill.dangerous { background: rgba(255,77,109,.14); color: var(--danger); box-shadow: inset 0 0 0 1px rgba(255,77,109,.3), 0 0 12px rgba(255,77,109,.18); }
 
 /* ===================== SCAN ===================== */
-.scan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+.scan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; }
 
 .tabs { display: flex; gap: 6px; background: var(--surface-2); padding: 6px;
   border-radius: 14px; margin-bottom: 20px; border: 1px solid var(--border); }
@@ -907,10 +929,14 @@ button { font-family: inherit; cursor: pointer; }
   -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
   border: 1px solid var(--border-strong);
   padding: 13px 22px; border-radius: 13px; box-shadow: var(--shadow-lg);
-  font-size: .88rem; font-weight: 500; z-index: 100; transition: transform .4s var(--ease);
+  font-size: .88rem; font-weight: 500; z-index: 100;
+  transition: transform .4s var(--ease), opacity .4s var(--ease), visibility .4s;
   max-width: 90vw;
+  /* fully hidden until a message is shown — otherwise the empty shell peeks
+     above the viewport bottom as a small box */
+  opacity: 0; visibility: hidden; pointer-events: none;
 }
-.toast.show { transform: translate(-50%, 0); }
+.toast.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; pointer-events: auto; }
 .toast.ok { border-left: 3px solid var(--safe); box-shadow: var(--shadow-lg), -6px 0 20px -8px var(--safe); }
 .toast.warn { border-left: 3px solid var(--sus); box-shadow: var(--shadow-lg), -6px 0 20px -8px var(--sus); }
 .toast.err { border-left: 3px solid var(--danger); box-shadow: var(--shadow-lg), -6px 0 20px -8px var(--danger); }
